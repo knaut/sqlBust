@@ -1,5 +1,7 @@
 'use strict';
 
-export default function start() {
+export function start() {
 	console.log('hello from sqlbust');
 }
+
+start();

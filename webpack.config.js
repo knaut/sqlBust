@@ -4,7 +4,8 @@ const path = require('path');
 
 module.exports = {
 	mode: 'development',
-	entry: './server/index.js',
+	// should be client
+	// entry: './server/index.js',
 	output: {
 		path: path.resolve( __dirname, 'build' ),
 		filename: 'bundle.js'
@@ -13,5 +14,16 @@ module.exports = {
     hints: 'warning'
   },
   devtool: 'source-map',
-  target: 'web'
+  target: 'web',
+  module: {
+  	rules: [
+  		{
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      }
+  	]
+  }
 };
