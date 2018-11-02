@@ -11,7 +11,7 @@ Env:
 Backend:
 
 - DB: MySQL
-- Server: HapiJS v17
+- Server: Express v4
 
 Frontend:
 
