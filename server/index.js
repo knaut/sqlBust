@@ -2,6 +2,7 @@
 
 // IMPORTS
 import express from 'express';
+import chalk from 'chalk';
 
 // SETUP
 const app = express();
@@ -10,31 +11,24 @@ const port = 3000;
 // ROUTER
 const router = express.Router();
 
-const handlers = [
+const loggers = [
   function(req, res, next) {
-    console.log('this is another message of some kind');
-
+    console.log(
+      chalk.green(req.method),
+      chalk.gray(req.headers.host),
+      chalk.green(req.url),
+      chalk.blue('Body:', req.body)
+    );
     next();
-  },
-  function(req, res, next) {
-    console.log('this is a route with multiple callbacks');
-
-    next();
-  },
+  }
 ];
 
-router.use(handlers);
-
-router.get('/', function(req, res) {
-  res.send('hello!!');
-});
-
-router.get('/test', function(req, res) {
-  res.send('random test');
-});
+app.use(loggers);
 
 // ROUTES
-app.use('/home', router);
+app.use('/', function(req, res) {
+  res.send('hello!');
+});
 
 app.listen(port, function() {
   console.log(`sqlBust listening on ${port}`);
