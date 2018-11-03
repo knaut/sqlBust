@@ -24,17 +24,31 @@ const loggers = [
 
 app.use(loggers);
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 10,
   host: '0.0.0.0',
   user: 'root',
   password: '',
   database: 'magnitude'
 });
 
-function getLessons(connection) {
+function getLessons(db) {
   return new Promise( function( resolve, reject ) {
     var query = `select * from lessons`;
-    connection.query(query, function(error, results, fields) {
+    db.query(query, function(error, results, fields) {
+      if (error) {
+        console.log(error);
+        return reject(error);
+      }
+      return resolve( results );
+    });
+  });
+}
+
+function getProducts(db) {
+  return new Promise( function( resolve, reject ) {
+    var query = `select * from products`;
+    db.query(query, function(error, results, fields) {
       if (error) {
         console.log(error);
         return reject(error);
@@ -47,8 +61,13 @@ function getLessons(connection) {
 // ROUTES
 app.get('/', async function(req, res) {
 
-  const lessons = await getLessons( connection );
-  res.send(lessons);
+  const lessons = await getLessons( pool );
+  const products = await getProducts( pool );
+
+  res.json({
+    lessons,
+    products
+  });
 
 });
 
