@@ -34,7 +34,6 @@ const connection = mysql.createConnection({
 function getLessons(connection) {
   return new Promise( function( resolve, reject ) {
     var query = `select * from lessons`;
-    connection.connect();
     connection.query(query, function(error, results, fields) {
       if (error) {
         console.log(error);
@@ -46,11 +45,10 @@ function getLessons(connection) {
 }
 
 // ROUTES
-app.get('/', function(req, res) {
+app.get('/', async function(req, res) {
 
-  getLessons( connection ).then(results => {
-    res.send(results)
-  });
+  const lessons = await getLessons( connection );
+  res.send(lessons);
 
 });
 
