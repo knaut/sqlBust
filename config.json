@@ -1,18 +1,25 @@
 {
-  platforms: {
-    sandbox: {
-      connectionLimit: 10,
-      host: '0.0.0.0',
-      user: 'root',
-      password: '',
-      database: 'sandbox'
+  "platforms": {
+    "bookstore": {
+      "connectionLimit": 10,
+      "host": "0.0.0.0",
+      "user": "root",
+      "password": "",
+      "database": "bookstore"
     },
-    magnitude: {
-      connectionLimit: 10,
-      host: '0.0.0.0',
-      user: 'root',
-      password: '',
-      database: 'magnitude'
+    "sandbox": {
+      "connectionLimit": 10,
+      "host": "0.0.0.0",
+      "user": "root",
+      "password": "",
+      "database": "sandbox"
     },
+    "magnitude": {
+      "connectionLimit": 10,
+      "host": "0.0.0.0",
+      "user": "root",
+      "password": "",
+      "database": "magnitude"
+    }
   }
 }

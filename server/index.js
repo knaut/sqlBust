@@ -2,34 +2,26 @@
 
 // IMPORTS
 import express from 'express';
-import chalk from 'chalk';
 import mysql from 'mysql';
+
+// CONFIG
+import config from '../config.json';
+
+// MIDDLEWARE
+import logger from './middleware/logger';
 
 // SETUP
 const app = express();
 const port = 3000;
 
-const loggers = [
-  function(req, res, next) {
-    console.log(
-      chalk.green(req.method),
-      chalk.gray(req.headers.host),
-      chalk.green(req.url),
-      chalk.blue('Body:'),
-      res.body
-    );
-    next();
-  }
-];
-
-app.use(loggers);
+app.use(logger);
 
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: '0.0.0.0',
   user: 'root',
   password: '',
-  database: 'magnitude'
+  database: 'sandbox'
 });
 
 function getLessons(db) {
@@ -45,28 +37,13 @@ function getLessons(db) {
   });
 }
 
-function getProducts(db) {
-  return new Promise( function( resolve, reject ) {
-    var query = `select * from products`;
-    db.query(query, function(error, results, fields) {
-      if (error) {
-        console.log(error);
-        return reject(error);
-      }
-      return resolve( results );
-    });
-  });
-}
-
 // ROUTES
 app.get('/', async function(req, res) {
 
-  const lessons = await getLessons( pool );
-  const products = await getProducts( pool );
+  // const lessons = await getLessons( pool );
 
   res.json({
-    lessons,
-    products
+    // lessons,
   });
 
 });
