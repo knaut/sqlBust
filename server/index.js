@@ -1,11 +1,13 @@
 'use strict';
 
 // IMPORTS
+require('dotenv').config();
 import express from 'express';
 import mysql from 'mysql';
 
 // CONFIG
 import config from '../config.json';
+const platform = config.platforms[ process.env.PLATFORM ];
 
 // MIDDLEWARE
 import logger from './middleware/logger';
@@ -16,13 +18,8 @@ const port = 3000;
 
 app.use(logger);
 
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: '0.0.0.0',
-  user: 'root',
-  password: '',
-  database: 'sandbox'
-});
+// DB
+const pool = mysql.createPool(platform);
 
 function getLessons(db) {
   return new Promise( function( resolve, reject ) {
@@ -37,15 +34,17 @@ function getLessons(db) {
   });
 }
 
-// ROUTES
-app.get('/', async function(req, res) {
-
-  // const lessons = await getLessons( pool );
-
-  res.json({
-    // lessons,
+// STATIC ASSET ROUTES
+app.get('/', function(req, res) {
+  res.sendFile('index.html', {
+    root: `${__dirname}/../build/`
   });
+});
 
+app.get('/bundle.js', function(req, res) {
+  res.sendFile('bundle.js', {
+    root: `${__dirname}/../build/`
+  });
 });
 
 app.post('/', function(req, res) {
