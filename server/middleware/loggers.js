@@ -4,13 +4,22 @@ import Moment from 'moment';
 
 export function request(req, res, next) {
   // log our request
-  console.log(
-    chalk.green(req.method),
-    chalk.gray(req.headers.host),
-    chalk.green(req.url),
-    chalk.blue('Body:'),
-    res.body
-  );
+
+  if (req.method === 'GET') {
+    console.log(
+      chalk.cyan.bold(req.method),
+      chalk.gray(req.headers.host),
+      chalk.green(req.url),
+    );
+  }
+
+  if (req.method === 'POST') {
+    console.log(
+      chalk.green.bold(req.method),
+      chalk.gray(req.headers.host),
+      chalk.green(req.url)
+    );
+  }
   
   // proceed to next middleware
   next();
@@ -27,4 +36,5 @@ export function welcome(port, clear) {
     chalk.gray(`on`),
     chalk.magenta(`${Moment().format('h:mm:ss A - ddd Do of MMM')}`)
   );
+  console.log(`Using platform:`, chalk.magenta( process.env.PLATFORM ))
 };

@@ -4,6 +4,8 @@
 require('dotenv').config();
 import express from 'express';
 import mysql from 'mysql';
+import bodyParser from 'body-parser';
+import multer from 'multer';
 
 // CONFIG
 import config from '../config.json';
@@ -14,37 +16,24 @@ import * as loggers from './middleware/loggers';
 
 // ROUTES
 import assets from './api/assets';
-
+import users from './api/users/routes';
 
 // SETUP
 const app = express();
 const port = 3000;
 
+app.use( bodyParser.json() ); // for parsing application/json
+app.use( bodyParser.urlencoded({ extended: true }) ); // for parsing application/x-www-form-urlencoded
 app.use( loggers.request );
 
 // DB
 const pool = mysql.createPool(platform);
 
-function getLessons(db) {
-  return new Promise( function( resolve, reject ) {
-    var query = `select * from lessons`;
-    db.query(query, function(error, results, fields) {
-      if (error) {
-        console.log(error);
-        return reject(error);
-      }
-      return resolve( results );
-    });
-  });
-}
-
 // STATIC ASSET ROUTES
 assets(app);
 
-// API ROUTES
-app.post('/', function(req, res) {
-  res.send('posted!');
-});
+// APIS
+app.use('/api/users', users(pool));
 
 // START
 app.listen(port, function() {
