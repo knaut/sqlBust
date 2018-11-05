@@ -12,6 +12,10 @@ const platform = config.platforms[ process.env.PLATFORM ];
 // MIDDLEWARE
 import * as loggers from './middleware/loggers';
 
+// ROUTES
+import assets from './api/assets';
+
+
 // SETUP
 const app = express();
 const port = 3000;
@@ -35,17 +39,7 @@ function getLessons(db) {
 }
 
 // STATIC ASSET ROUTES
-app.get('/', function(req, res) {
-  res.sendFile('index.html', {
-    root: `${__dirname}/../build/`
-  });
-});
-
-app.get('/bundle.js', function(req, res) {
-  res.sendFile('bundle.js', {
-    root: `${__dirname}/../build/`
-  });
-});
+assets(app);
 
 // API ROUTES
 app.post('/', function(req, res) {
@@ -54,5 +48,5 @@ app.post('/', function(req, res) {
 
 // START
 app.listen(port, function() {
-  loggers.welcome( port );
+  loggers.welcome( port, false );
 });

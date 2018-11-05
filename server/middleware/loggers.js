@@ -16,8 +16,10 @@ export function request(req, res, next) {
   next();
 };
 
-export function welcome(port) {
-  clear();
+export function welcome(port, clear) {
+  if (clear) { 
+    clear();
+  }
   console.log(
     chalk.bold(` sqlBust `),
     chalk.gray('server started at'),
