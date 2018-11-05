@@ -10,13 +10,13 @@ import config from '../config.json';
 const platform = config.platforms[ process.env.PLATFORM ];
 
 // MIDDLEWARE
-import logger from './middleware/logger';
+import * as loggers from './middleware/loggers';
 
 // SETUP
 const app = express();
 const port = 3000;
 
-app.use(logger);
+app.use( loggers.request );
 
 // DB
 const pool = mysql.createPool(platform);
@@ -47,10 +47,12 @@ app.get('/bundle.js', function(req, res) {
   });
 });
 
+// API ROUTES
 app.post('/', function(req, res) {
   res.send('posted!');
 });
 
+// START
 app.listen(port, function() {
-  console.log(`sqlBust listening on ${port}`);
+  loggers.welcome( port );
 });
